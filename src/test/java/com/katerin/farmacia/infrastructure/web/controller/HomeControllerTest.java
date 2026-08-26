@@ -23,7 +23,7 @@ public class HomeControllerTest {
 
     @Test
     void testHealthcheckEndopoint() throws Exception{
-        mockMvc.perform(get("/healtcheck"))
+        mockMvc.perform(get("/healthcheck"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status").value("UP"));
@@ -45,7 +45,7 @@ public class HomeControllerTest {
         mockMvc.perform(get("/api/v1/medications/2"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").value("2"))
+                .andExpect(jsonPath("$.id").value(2))
                 .andExpect(jsonPath("$.name").value("Ibuprofeno"))
                 .andExpect(jsonPath("$.price").value(1200));
         }

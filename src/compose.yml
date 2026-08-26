@@ -1,0 +1,15 @@
+services:
+  db: 
+    image: postgres:16-alpine # postgres 16 en version
+    container_name: pg-farmacia
+    ports:
+      -"${DB_PORT:-5432}:5432"
+    enviroment:
+      POSTGRES_DB: ${DB_NAME:-farmacia_db}
+      POSTGRES_USER: ${DB_USER:-user_db}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-pass_db}
+
+    volumes:
+      postgres_data: 
+    
+

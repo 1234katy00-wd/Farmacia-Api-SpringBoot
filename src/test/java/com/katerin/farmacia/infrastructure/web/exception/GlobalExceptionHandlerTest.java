@@ -23,7 +23,7 @@ public class GlobalExceptionHandlerTest {
         bindinResult.addError(new FieldError("target", "name", "no puede estar vacío"));
 
         MethodParameter parameter = new MethodParameter(
-            this.getClass().getDeclaredMethod("estHandleValidationExceptions"), -1);
+            this.getClass().getDeclaredMethod("testHandleValidationExceptions"), -1);
 
             MethodArgumentNotValidException exception = new MethodArgumentNotValidException(parameter, bindinResult);
             
@@ -31,6 +31,9 @@ public class GlobalExceptionHandlerTest {
 
             assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
             assertNotNull(responseEntity.getBody());
+            assertEquals(400, responseEntity.getBody().status());
+            assertEquals("name:no puede estar vacío", responseEntity.getBody().message());
+
 
     }
 }

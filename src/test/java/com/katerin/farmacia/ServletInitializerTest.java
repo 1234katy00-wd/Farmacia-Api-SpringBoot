@@ -9,22 +9,18 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class ServletInitializerTest {
-    private static class TestableServletInitializer extends ServletInitializer {
-        SpringApplicationBuilder callConfigure(SpringApplicationBuilder builder) {
-            return super.configure(builder);
-        }
-    }
 
     @Test
     void testConfigure() {
-        TestableServletInitializer servletInitializer = new TestableServletInitializer();
+        ServletInitializer servletInitializer = new ServletInitializer();
         SpringApplicationBuilder builder = mock(SpringApplicationBuilder.class);
 
-        when(builder.sources(FarmaciaApplication.class)).thenReturn(builder);
+        when (builder.sources(FarmaciaApplication.class)).thenReturn(builder);
 
-        SpringApplicationBuilder result = servletInitializer.callConfigure(builder);
+        SpringApplicationBuilder result = servletInitializer.configure(builder);
 
         assertNotNull(result);
         verify(builder).sources(FarmaciaApplication.class);
+        
     }
 }

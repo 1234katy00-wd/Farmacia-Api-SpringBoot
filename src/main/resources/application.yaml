@@ -1,3 +1,12 @@
 spring:
-  application:
-    name: farmacia_api
+    application:
+        name: farmacia_api
+    profiles:
+        active: dev
+
+springdoc:
+    api-docs:
+        enabled: false
+    swagger-ui:
+        enabled: false
+
