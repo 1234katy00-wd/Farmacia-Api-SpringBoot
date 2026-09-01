@@ -11,7 +11,7 @@ public record PurchaseResponseDto(
     String message,
 
     @Schema(description = "Código del medicamento", example = "MED-001")
-    String medicationId,
+    Integer medicationId,
 
     @Schema(description = "Nombre del medicamento", example = "Paracetamol")
     String medicationName,

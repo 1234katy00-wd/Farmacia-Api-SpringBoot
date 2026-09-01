@@ -4,15 +4,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "Datos de un ticket emitido")
 public record TicketResponseDto(
-    @Schema(description = "ID auto-incremental del ticket", example = "1")
-    String id,
+    @Schema(description = "ID auto-incremental del ticket", example = "001")
+    Integer id,
 
     
     @Schema(description = "Código único del ticket", example = "TCK-4A8F9C12")
     String code,
 
-    @Schema(description = "Código único del concierto", example = "MED-001")
-    String medicationId,
+    @Schema(description = "Código único del concierto", example = "001")
+    Integer medicationId,
 
     @Schema(description = "El nombre del medicamento", example = "Paracetamol")
     String medicationName,

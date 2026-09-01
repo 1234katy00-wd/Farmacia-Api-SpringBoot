@@ -34,4 +34,14 @@ public class ApiResponseTest {
         assertNull(response.name());
         assertNotNull(response.timestamp());
     }
+
+    @Test
+    void shouldReturnNotFoundErrorResponse() {
+        ApiResponse response = ApiResponse.error(404, "Recurso no encontrado");
+
+        assertEquals(404, response.status());
+        assertEquals("Recurso no encontrado", response.message());
+        assertNull(response.name());
+        assertNotNull(response.timestamp());
+    }
 }

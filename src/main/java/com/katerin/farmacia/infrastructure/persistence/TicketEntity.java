@@ -14,8 +14,8 @@ import jakarta.persistence.Table;
 public class TicketEntity {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "medication_id", nullable = false)
@@ -29,7 +29,7 @@ public class TicketEntity {
 
     public TicketEntity(){}
 
-    public TicketEntity(String id, String code, MedicationEntity medication, String customerEmail, String medicationName,
+    public TicketEntity(Integer id, String code, MedicationEntity medication, String customerEmail, String medicationName,
             Integer totalPrice, String purchaseDate) {
         this.id = id;
         this.code = code;
@@ -40,11 +40,11 @@ public class TicketEntity {
         this.purchaseDate = purchaseDate;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
     

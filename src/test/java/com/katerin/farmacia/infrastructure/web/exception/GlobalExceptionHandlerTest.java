@@ -22,10 +22,7 @@ public class GlobalExceptionHandlerTest {
         BeanPropertyBindingResult bindinResult = new BeanPropertyBindingResult(new Object(), "target");
         bindinResult.addError(new FieldError("target", "name", "no puede estar vacío"));
 
-        MethodParameter parameter = new MethodParameter(
-            this.getClass().getDeclaredMethod("testHandleValidationExceptions"), -1);
-
-            MethodArgumentNotValidException exception = new MethodArgumentNotValidException(parameter, bindinResult);
+            MethodArgumentNotValidException exception = new MethodArgumentNotValidException(null, bindinResult);
             
             ResponseEntity<ApiResponse> responseEntity = handler.handleValidationExceptions(exception);
 

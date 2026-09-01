@@ -1,7 +1,6 @@
 package com.katerin.farmacia.infrastructure.web.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.katerin.farmacia.application.service.MedicationService;
-import com.katerin.farmacia.domain.exception.OutOfStockException;
 import com.katerin.farmacia.domain.model.Medication;
 import com.katerin.farmacia.domain.model.Ticket;
 import com.katerin.farmacia.infrastructure.web.dto.MedicationResponseDto;
@@ -62,7 +60,7 @@ public class MedicationController {
         
     })
     @GetMapping("/{id}")
-    public ResponseEntity<MedicationResponseDto> getMedicationById(@PathVariable(name ="id")String id){
+    public ResponseEntity<MedicationResponseDto> getMedicationById(@PathVariable(name ="id")Integer id){
         Medication medication = medicationService.getMedicationById(id);
         return ResponseEntity.ok(toResponse(medication));
     }
@@ -101,7 +99,7 @@ public class MedicationController {
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PutMapping("/{id}")
-    public ResponseEntity<MedicationResponseDto> updateMedication(@PathVariable(name= "id")String id, @Valid @RequestBody MedicationRequestDto request){
+    public ResponseEntity<MedicationResponseDto> updateMedication(@PathVariable(name= "id")Integer id, @Valid @RequestBody MedicationRequestDto request){
         Medication medicationUpdate = new Medication(
             id,
             request.code(),
@@ -126,7 +124,7 @@ public class MedicationController {
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMedication(@PathVariable(name="id")String id){
+    public ResponseEntity<Void> deleteMedication(@PathVariable(name="id")Integer id){
         medicationService.deleteMedication(id);
         return ResponseEntity.noContent().build();
     }
@@ -140,8 +138,8 @@ public class MedicationController {
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @PostMapping ("/{id}/purchase")
-    public ResponseEntity<List<TicketResponseDto>> purchaseTickets(@PathVariable(name="id")String id, @Valid @RequestBody PurchaseRequestDto request){
-        List<Ticket> purchased = medicationService.purchaTickets(
+    public ResponseEntity<List<TicketResponseDto>> purchaseTickets(@PathVariable(name="id")Integer id, @Valid @RequestBody PurchaseRequestDto request){
+        List<Ticket> purchased = medicationService.purchaseTickets(
             id, 
             request.medicationName(),
             request.customerEmail(),
@@ -161,7 +159,7 @@ public class MedicationController {
         @ApiResponse(responseCode = "500", description = "Error interno del servidor")
     })
     @GetMapping("/{id}/tickets")
-    public ResponseEntity<List<TicketResponseDto>> getMedicationTickets(@PathVariable(name = "id")String id){
+    public ResponseEntity<List<TicketResponseDto>> getMedicationTickets(@PathVariable(name = "id")Integer id){
         List<TicketResponseDto> tickets = medicationService.getMedicationTickets(id).stream()
                 .map(this::toTicketResponse)
                 .toList();

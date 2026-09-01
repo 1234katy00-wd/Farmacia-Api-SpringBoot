@@ -1,9 +1,9 @@
 package com.katerin.farmacia.domain.model;
 
 public record Ticket(
-    String id,
+    Integer id,
     String code,
-    String medicationId,
+    Integer medicationId,
     String medicationName,
     Integer totalPrice,
     String customerEmail,

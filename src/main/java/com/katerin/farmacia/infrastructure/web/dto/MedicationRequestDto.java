@@ -9,7 +9,7 @@ public record MedicationRequestDto(
     String code,
     
     @Schema(description = "ID auto-incremental del ticket", example = "1")
-    String id,
+    Integer id,
 
     @Schema(description = "El nombre del medicamento", example = "Paracetamol")
     String medicationName,

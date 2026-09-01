@@ -40,7 +40,7 @@ public class MedicationServiceImpl implements MedicationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Medication getMedicationById(String id){
+    public Medication getMedicationById(Integer id){
         MedicationEntity entity = medicationJpaRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Medication with id" + id + "not found"));
         return toDomain(entity);
     }
@@ -75,7 +75,7 @@ public class MedicationServiceImpl implements MedicationService {
 
     @Override
     @Transactional
-    public Medication updateMedication(String id, Medication medication) {
+    public Medication updateMedication(Integer id, Medication medication) {
         MedicationEntity entity = medicationJpaRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Medication with id" + id + "not found"));
 
         if(medication.medicationName() != null) entity.setMedicationName(medication.medicationName());
@@ -96,7 +96,7 @@ public class MedicationServiceImpl implements MedicationService {
 
     @Override
     @Transactional
-    public void deleteMedication(String id) {
+    public void deleteMedication(Integer id) {
         if (!medicationJpaRepository.existsById(id)) {
             throw new ResourceNotFoundException("Medication with id '" + id + "' not found");
         }
@@ -107,8 +107,8 @@ public class MedicationServiceImpl implements MedicationService {
 
     @Override
     @Transactional
-    public List<Ticket> purchaTickets(
-            String medicationId,
+    public List<Ticket> purchaseTickets(
+            Integer medicationId,
             String medicationName,
             String customerEmail,
             int quantity) {
@@ -133,11 +133,12 @@ public class MedicationServiceImpl implements MedicationService {
         for (int index = 0; index < quantity; index++) {
             TicketEntity ticket = new TicketEntity(
                     null,
+                    medication.getCode(),
                     medication,
                     customerEmail,
                     name,
                     ticketPrice,
-                LocalDate.now().toString());
+                    LocalDate.now().toString());
             medication.addTicket(ticket);
             tickets.add(ticket);
         }
@@ -150,7 +151,7 @@ public class MedicationServiceImpl implements MedicationService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Ticket> getMedicationTickets(String medicationId) {
+    public List<Ticket> getMedicationTickets(Integer medicationId) {
         return ticketJpaRepository.findByMedicationId(medicationId)
                 .stream()
                 .map(this::toDomain)
@@ -175,11 +176,14 @@ public class MedicationServiceImpl implements MedicationService {
     private Ticket toDomain(TicketEntity entity) {
         return new Ticket(
                 entity.getId(),
+                entity.getCode(),
                 entity.getMedication().getId(),
                 entity.getMedicationName(),
                 entity.getTotalPrice(),
                 entity.getCustomerEmail(),
                 entity.getPurchaseDate());
     }
+
+    
 
 }

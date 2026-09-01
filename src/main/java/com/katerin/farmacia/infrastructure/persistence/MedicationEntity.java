@@ -16,8 +16,8 @@ import jakarta.persistence.Table;
 public class MedicationEntity {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     private String code;
     private LocalDate creationDate;
     private LocalDate dueDate;
@@ -40,7 +40,7 @@ public class MedicationEntity {
 
 
 
-    public MedicationEntity(String id,String code, LocalDate creationDate, LocalDate dueDate, String medicationName, String status,
+    public MedicationEntity(Integer id,String code, LocalDate creationDate, LocalDate dueDate, String medicationName, String status,
             int price, String description, String activeIngredient, Integer ticketPrice, Integer totalTickets, Integer availableTickets) {
         this.id = id;
         this.code= code;
@@ -76,13 +76,13 @@ public class MedicationEntity {
         return tickets;
     }
 
-    public String getId() {
+    public Integer getId() {
         return id;
     }
 
 
 
-    public void setId(String id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

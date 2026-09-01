@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.katerin.farmacia.infrastructure.persistence.TicketEntity;
 
 @Repository
-public interface TicketJpaRepository extends JpaRepository<TicketEntity, String>{
-    List<TicketEntity> findByMedicationId(String medicationId);
+public interface TicketJpaRepository extends JpaRepository<TicketEntity, Integer>{
+    List<TicketEntity> findByMedicationId(Integer medicationId);
     
 }

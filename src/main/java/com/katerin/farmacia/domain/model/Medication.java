@@ -3,7 +3,7 @@ package com.katerin.farmacia.domain.model;
 import java.time.LocalDate;
 
 public record Medication (
-    String id,
+    Integer id,
     String code,
     String medicationName,
     Integer ticketPrice,
