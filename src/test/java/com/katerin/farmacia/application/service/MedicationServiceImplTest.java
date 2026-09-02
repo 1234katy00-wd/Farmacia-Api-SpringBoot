@@ -59,7 +59,7 @@ public class MedicationServiceImplTest {
 
         Medication medication = medicationService.getMedicationById(001);
 
-        assertEquals("M-001", medication.id());
+        assertEquals(001, medication.id());
         assertEquals("Paracetamol", medication.medicationName());
         assertEquals(950, medication.ticketPrice());
     }
@@ -173,8 +173,8 @@ public class MedicationServiceImplTest {
                 001, "Fallback name", "ana@example.com", 2);
 
         assertEquals(2, tickets.size());
-        assertEquals(001, tickets.get(0).code());
-        assertEquals(001, tickets.get(0).medicationId());
+        assertEquals("MED-001", tickets.get(0).code());
+        assertEquals(1, tickets.get(0).medicationId());
         assertEquals("Paracetamol", tickets.get(0).medicationName());
         assertEquals("ana@example.com", tickets.get(0).customerEmail());
         assertEquals(950, tickets.get(0).totalPrice());
@@ -206,8 +206,9 @@ public class MedicationServiceImplTest {
         List<Ticket> tickets = medicationService.getMedicationTickets(001);
 
         assertEquals(1, tickets.size());
-        assertEquals("T-001", tickets.get(0).id());
-        assertEquals("M-001", tickets.get(0).medicationId());
+        assertEquals(001, tickets.get(0).id());
+        assertEquals(1, tickets.get(0).medicationId());
+        assertEquals("MED-001", tickets.get(0).code());
     }
 
     private Medication medication(Integer id, String name, int price) {

@@ -143,8 +143,8 @@ public class MedicationServiceImpl implements MedicationService {
             tickets.add(ticket);
         }
 
-        return ticketJpaRepository.saveAll(tickets)
-                .stream()
+        List<TicketEntity> savedTickets = ticketJpaRepository.saveAll(tickets);
+        return savedTickets.stream()
                 .map(this::toDomain)
                 .toList();
     }
@@ -176,8 +176,8 @@ public class MedicationServiceImpl implements MedicationService {
     private Ticket toDomain(TicketEntity entity) {
         return new Ticket(
                 entity.getId(),
-                entity.getCode(),
-                entity.getMedication().getId(),
+                entity.getMedication() != null ? entity.getMedication().getCode() : entity.getCode(),
+                entity.getMedication() != null ? entity.getMedication().getId() : null,
                 entity.getMedicationName(),
                 entity.getTotalPrice(),
                 entity.getCustomerEmail(),

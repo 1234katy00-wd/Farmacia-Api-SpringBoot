@@ -7,9 +7,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.LocalDate;
 import java.util.Optional;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.katerin.farmacia.infrastructure.persistence.repository.MedicationJpaRepository;
 import com.katerin.farmacia.infrastructure.persistence.repository.TicketJpaRepository;
@@ -17,8 +19,15 @@ import com.katerin.farmacia.infrastructure.persistence.repository.TicketJpaRepos
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @Transactional
 public class MedicationJpaRepositoryTest {
+
+    @BeforeEach
+    void cleanDatabase() {
+        ticketJpaRepository.deleteAll();
+        medicationJpaRepository.deleteAll();
+    }
     
     @Autowired
     private MedicationJpaRepository medicationJpaRepository;
@@ -28,10 +37,10 @@ public class MedicationJpaRepositoryTest {
 
     @Test
     public void shouldSaveAndRetrieveMedicationSuccessfully() {
-        MedicationEntity entity = medication(001, "Paracetamol");
+        MedicationEntity entity = medication(null, "Paracetamol");
 
-        medicationJpaRepository.save(entity);
-        Optional<MedicationEntity> searchId = medicationJpaRepository.findById(001);
+        MedicationEntity saved = medicationJpaRepository.saveAndFlush(entity);
+        Optional<MedicationEntity> searchId = medicationJpaRepository.findById(saved.getId());
 
         assertTrue(searchId.isPresent(), "El medicamento ya existe.");
         assertEquals("Paracetamol", searchId.get().getMedicationName());
@@ -41,49 +50,49 @@ public class MedicationJpaRepositoryTest {
 
     @Test
     public void shouldFindAllSavedMedications() {
-        medicationJpaRepository.save(medication(001, "Paracetamol"));
-        medicationJpaRepository.save(medication(002, "Ibuprofeno"));
+        medicationJpaRepository.saveAndFlush(medication(null, "Paracetamol"));
+        medicationJpaRepository.saveAndFlush(medication(null, "Ibuprofeno"));
 
         assertEquals(2, medicationJpaRepository.findAll().size());
     }
 
     @Test
     public void shouldUpdateMedicationSuccessfully() {
-        MedicationEntity entity = medication(001, "Paracetamol");
-        medicationJpaRepository.save(entity);
+        MedicationEntity entity = medication(null, "Paracetamol");
+        MedicationEntity saved = medicationJpaRepository.saveAndFlush(entity);
 
-        entity.setMedicationName("Ibuprofeno");
-        entity.setAvailableTickets(2);
-        medicationJpaRepository.save(entity);
+        saved.setMedicationName("Ibuprofeno");
+        saved.setAvailableTickets(2);
+        medicationJpaRepository.saveAndFlush(saved);
 
-        MedicationEntity updated = medicationJpaRepository.findById(001).orElseThrow();
+        MedicationEntity updated = medicationJpaRepository.findById(saved.getId()).orElseThrow();
         assertEquals("Ibuprofeno", updated.getMedicationName());
         assertEquals(2, updated.getAvailableTickets());
     }
 
     @Test
     public void shouldDeleteMedicationSuccessfully() {
-        medicationJpaRepository.save(medication(001, "Paracetamol"));
-        medicationJpaRepository.deleteById(001);
+        MedicationEntity saved = medicationJpaRepository.saveAndFlush(medication(null, "Paracetamol"));
+        medicationJpaRepository.deleteById(saved.getId());
 
-        assertFalse(medicationJpaRepository.existsById(001));
+        assertFalse(medicationJpaRepository.existsById(saved.getId()));
     }
 
     @Test
     public void shouldFindTicketsByMedicationId() {
-        MedicationEntity medication = medication(001, "Paracetamol");
-        medicationJpaRepository.save(medication);
+        MedicationEntity medication = medication(null, "Paracetamol");
+        MedicationEntity savedMedication = medicationJpaRepository.saveAndFlush(medication);
         ticketJpaRepository.save(new TicketEntity(
-                001,
+                null,
                 "TCK-001",
-                medication,
+                savedMedication,
                 "ana@example.com",
                 "Paracetamol",
                 950,
                 "2026-08-27"));
 
-        assertEquals(1, ticketJpaRepository.findByMedicationId(001).size());
-        assertEquals("T-001", ticketJpaRepository.findByMedicationId(001).get(0).getId());
+        assertEquals(1, ticketJpaRepository.findByMedicationId(savedMedication.getId()).size());
+        assertEquals("TCK-001", ticketJpaRepository.findByMedicationId(savedMedication.getId()).get(0).getCode());
     }
 
     private MedicationEntity medication(Integer id, String name) {

@@ -79,8 +79,8 @@ public class MedicationControllerTest {
 
         mockMvc.perform(get("/api/v1/medications/missing"))
             .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.code").value(404))
-            .andExpect(jsonPath("$.message").value("Medication with id missing not found"));
+            .andExpect(jsonPath("$.code").value(400))
+            .andExpect(jsonPath("$.message").value("Invalid path parameter: id"));
     }
 
     @Test
@@ -155,7 +155,7 @@ public class MedicationControllerTest {
         when(medicationService.purchaseTickets(001, "Paracetamol", "ana@example.com", 4))
             .thenThrow(new OutOfStockException("Not enough stock"));
 
-        mockMvc.perform(post("/api/v1/medications/M-001/purchase")
+        mockMvc.perform(post("/api/v1/medications/001/purchase")
                 .contentType(APPLICATION_JSON)
                 .content("""
                     {"customerEmail":"ana@example.com","quantity":4,"medicationName":"Paracetamol"}
@@ -169,7 +169,7 @@ public class MedicationControllerTest {
         when(medicationService.purchaseTickets(999, "Paracetamol", "ana@example.com", 1))
             .thenThrow(new ResourceNotFoundException("Medication not found"));
 
-        mockMvc.perform(post("/api/v1/medications/missing/purchase")
+        mockMvc.perform(post("/api/v1/medications/999/purchase")
                 .contentType(APPLICATION_JSON)
                 .content("""
                     {"customerEmail":"ana@example.com","quantity":1,"medicationName":"Paracetamol"}
@@ -224,7 +224,7 @@ public class MedicationControllerTest {
         when(medicationService.purchaseTickets(001, "Paracetamol", "ana@example.com", 1))
             .thenReturn(List.of());
 
-        mockMvc.perform(post("/api/v1/medications/M-001/purchase")
+        mockMvc.perform(post("/api/v1/medications/001/purchase")
                 .contentType(APPLICATION_JSON)
                 .content("""
                     {"customerEmail":"ana@example.com","quantity":1,"medicationName":"Paracetamol"}
