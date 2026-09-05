@@ -20,10 +20,10 @@ public record TicketResponseDto(
     @Schema(description = "Correo del cliente", example = "alice@example.com")
     String customerEmail,
 
-    @Schema(description = "Precio total pagado", example = "45000")
+    @Schema(description = "Precio total pagado", example = "950")
     Integer totalPrice,
 
-    @Schema(description = "Fecha de compra (ISO)", example = "2026-08-24T12:00:00")
+    @Schema(description = "Fecha de compra (ISO)", example = "2026-08-24")
     String purchaseDate
 
 ) {

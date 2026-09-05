@@ -49,7 +49,8 @@ public class MedicationControllerTest {
             null,
             null,
             3,
-            3);
+            3,
+            null);
         when(medicationService.getAllMedications()).thenReturn(List.of(medication));
 
         mockMvc.perform(get("/api/v1/medications"))
@@ -235,7 +236,7 @@ public class MedicationControllerTest {
 
     private Medication medication() {
         return new Medication(001, "MED-001", "Paracetamol", 950, null, null,
-            "OPEN", null, null, 3, 3);
+            "OPEN", null, null, 3, 3, null);
     }
 
     private Ticket ticket(Integer id) {

@@ -68,7 +68,8 @@ public class MedicationServiceImpl implements MedicationService {
             medication.activeIngredient(),
             medication.ticketPrice(),
             totalTickets,
-            availableTickets);
+            availableTickets,
+            medication.laboratory());
         MedicationEntity saved = medicationJpaRepository.save(entity);
         return toDomain(saved);
     }
@@ -87,6 +88,7 @@ public class MedicationServiceImpl implements MedicationService {
         if(medication.creationDate() !=null) entity.setCreationDate(medication.creationDate());
         if(medication.ticketPrice() !=null) entity.setTicketPrice(medication.ticketPrice());
         if(medication.totalTickets() !=null)  entity.setTotalTickets(medication.totalTickets());
+        if(medication.laboratory() !=null) entity.setLaboratory(medication.laboratory());
 
 
         MedicationEntity upMedication= medicationJpaRepository
@@ -170,7 +172,8 @@ public class MedicationServiceImpl implements MedicationService {
                 entity.getDescription(),
                 entity.getActiveIngredient(),
                 entity.getTotalTickets(),
-                entity.getAvailableTickets());
+                entity.getAvailableTickets(),
+                entity.getLaboratory());
     }
 
     private Ticket toDomain(TicketEntity entity) {

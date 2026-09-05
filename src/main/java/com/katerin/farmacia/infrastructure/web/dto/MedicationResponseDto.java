@@ -20,7 +20,7 @@ public record MedicationResponseDto(
     @Schema(description = "Correo del cliente", example = "alice@example.com")
     String customerEmail,
 
-    @Schema(description = "Precio total pagado", example = "45000")
+    @Schema(description = "Precio total pagado", example = "950")
     Integer totalPrice,
 
     @Schema(description = "Fecha de compra (ISO)", example = "2026-08-24T12:00:00")
@@ -30,7 +30,10 @@ public record MedicationResponseDto(
     String status,
 
     @Schema(description = "Medicamentos disponible", example = "50")
-    int availableMedication
+    int availableMedication,
+
+    @Schema(description = "Laboratorio del medicamento", example = "Laboratorio Chile")
+    String laboratory
 
 
 ) {

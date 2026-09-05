@@ -16,10 +16,10 @@ public record PurchaseResponseDto(
     @Schema(description = "Nombre del medicamento", example = "Paracetamol")
     String medicationName,
 
-    @Schema(description = "Total pagado", example = "9000")
+    @Schema(description = "Total pagado", example = "950")
     Integer price,
 
-    @Schema(description = "Cantidad de entradas compradas", example = "2")
+    @Schema(description = "Cantidad de medicamentos compradas", example = "2")
     int purchasedCount,
 
     @Schema(description = "Lista de tickets generados")

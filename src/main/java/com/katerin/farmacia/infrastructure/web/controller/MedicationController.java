@@ -85,7 +85,8 @@ public class MedicationController {
             null,
             null,
             null,
-            request.availableMedication()
+            request.availableMedication(),
+            null
         );
         Medication created = medicationService.createMedication(medicationToCreate);
         return ResponseEntity.status(HttpStatus.CREATED).body(toResponse(created));
@@ -111,7 +112,8 @@ public class MedicationController {
             null,
             null,
             null,
-            request.availableMedication()
+            request.availableMedication(),
+            request.laboratory()
         );
         Medication update = medicationService.updateMedication(id, medicationUpdate);
         return ResponseEntity.ok(toResponse(update));
@@ -176,9 +178,8 @@ public class MedicationController {
                 medication.ticketPrice(),
                 null,
                 medication.status(),
-                medication.availableTickets() != null
-                        ? medication.availableTickets()
-                        : 0
+                medication.availableTickets() != null ? medication.availableTickets() : 0,
+                medication.laboratory()
         );
     }
 

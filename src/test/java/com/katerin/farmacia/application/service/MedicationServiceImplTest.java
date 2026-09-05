@@ -1,5 +1,6 @@
 package com.katerin.farmacia.application.service;
 
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -76,7 +77,7 @@ public class MedicationServiceImplTest {
     void testGetMedicationByIdNull() {
         Medication medication = new Medication(
                 1, "MED-001", "Paracetamol", 0,null, null,
-                null, "Description", "Ingredient", null, null);
+                null, "Description", "Ingredient", null, null,null);
         when(medicationJpaRepository.save(org.mockito.ArgumentMatchers.any(MedicationEntity.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -94,7 +95,7 @@ public class MedicationServiceImplTest {
     void testCreateMedicationWithDefaults() {
         Medication medication = new Medication(
                 001, "MED-001", "Paracetamol", null, null, null,
-                null, "Description", "Ingredient", null, null);
+                null, "Description", "Ingredient", null, null,null);
         when(medicationJpaRepository.save(org.mockito.ArgumentMatchers.any(MedicationEntity.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -121,7 +122,7 @@ public class MedicationServiceImplTest {
         MedicationEntity entity = medicationEntity(001, "Paracetamol", 950);
         Medication update = new Medication(
                 null, "MED-002", "Ibuprofeno", 1200, null, null,
-                "CLOSED", null, null, null, 2);
+                "CLOSED", null, null, null, 2,null);
         when(medicationJpaRepository.findById(001)).thenReturn(Optional.of(entity));
         when(medicationJpaRepository.save(entity)).thenReturn(entity);
 
@@ -213,7 +214,7 @@ public class MedicationServiceImplTest {
 
     private Medication medication(Integer id, String name, int price) {
         return new Medication(id, "MED-001", name, price, null, null,
-                "OPEN", "Description", "Ingredient", 3, 3);
+                "OPEN", "Description", "Ingredient", 3, 3,null);
     }
 
     private TicketEntity ticketEntity(Integer id, MedicationEntity medication) {
@@ -234,6 +235,7 @@ public class MedicationServiceImplTest {
                 "Ingredient",
                 price,
                 3,
-                3);
+                3,
+                null);
     }
 }

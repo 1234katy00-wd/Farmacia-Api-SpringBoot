@@ -29,6 +29,7 @@ public class MedicationEntity {
     private Integer ticketPrice;
     private Integer totalTickets;
     private Integer availableTickets;
+    private String laboratory;
 
     @OneToMany(mappedBy = "medication")
     private List<TicketEntity> tickets = new ArrayList<>();
@@ -41,7 +42,7 @@ public class MedicationEntity {
 
 
     public MedicationEntity(Integer id,String code, LocalDate creationDate, LocalDate dueDate, String medicationName, String status,
-            int price, String description, String activeIngredient, Integer ticketPrice, Integer totalTickets, Integer availableTickets) {
+            int price, String description, String activeIngredient, Integer ticketPrice, Integer totalTickets, Integer availableTickets, String laboratory) {
         this.id = id;
         this.code= code;
         this.creationDate = creationDate;
@@ -54,6 +55,7 @@ public class MedicationEntity {
         this.ticketPrice = ticketPrice;
         this.totalTickets= totalTickets;
         this.availableTickets= availableTickets;
+        this.laboratory = laboratory;
     }
 
     public void addTicket(TicketEntity ticket) {
@@ -216,6 +218,24 @@ public class MedicationEntity {
 
     public void setAvailableTickets(Integer availableTickets) {
         this.availableTickets = availableTickets;
+    }
+
+
+
+    public String getLaboratory() {
+        return laboratory;
+    }
+
+
+
+    public void setLaboratory(String laboratory) {
+        this.laboratory = laboratory;
+    }
+
+
+
+    public void setTickets(List<TicketEntity> tickets) {
+        this.tickets = tickets;
     }
     
     

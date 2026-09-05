@@ -13,7 +13,9 @@ public record Medication (
     String description,
     String activeIngredient,
     Integer totalTickets,
-    Integer availableTickets
+    Integer availableTickets,
+    String laboratory
+
 
 ){
 

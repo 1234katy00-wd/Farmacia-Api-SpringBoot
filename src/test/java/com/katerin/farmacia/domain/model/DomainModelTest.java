@@ -23,7 +23,8 @@ public class DomainModelTest {
             "Description",
             "Ingredient",
             3,
-            3);
+            3,
+            null);
 
         assertNotNull(medication);
         assertEquals(001, medication.id());
@@ -65,11 +66,11 @@ public class DomainModelTest {
         Medication first = new Medication(
             001, "MED-001", "Paracetamol", 950,
             LocalDate.of(2026, 1, 1), LocalDate.of(2028, 1, 1),
-            "OPEN", "Description", "Ingredient", 3, 3);
+            "OPEN", "Description", "Ingredient", 3, 3,null);
         Medication second = new Medication(
             001, "MED-001", "Paracetamol", 950,
             LocalDate.of(2026, 1, 1), LocalDate.of(2028, 1, 1),
-            "OPEN", "Description", "Ingredient", 3, 3);
+            "OPEN", "Description", "Ingredient", 3, 3,null);
 
         assertEquals(first, second);
         assertEquals(first.hashCode(), second.hashCode());
@@ -80,11 +81,11 @@ public class DomainModelTest {
             Medication first = new Medication(
                 1, "MED-001", "Paracetamol", 950,
                 LocalDate.of(2026, 1, 1), LocalDate.of(2028, 1, 1),
-                "OPEN", "Description", "Ingredient", 3, 3);
+                "OPEN", "Description", "Ingredient", 3, 3, null);
             Medication second = new Medication(
                 2, "MED-002", "Ibuprofeno", 1200,
                 LocalDate.of(2026, 2, 1), LocalDate.of(2028, 2, 1),
-                "CLOSED", "Other", "OtherIngredient", 5, 5);
+                "CLOSED", "Other", "OtherIngredient", 5, 5,null);
 
             assertNotEquals(first, second);
         }

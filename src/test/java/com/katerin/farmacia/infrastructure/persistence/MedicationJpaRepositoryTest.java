@@ -108,7 +108,8 @@ public class MedicationJpaRepositoryTest {
                 "acetaminofén",
                 950,
                 3,
-                3);
+                3,
+                "Laboratorio Chile");
     }
     
 }
