@@ -1,62 +1,190 @@
 # Farmacia API
 
-API REST para consultar medicamentos y simular compras en una farmacia. El proyecto está construido con Spring Boot y se encuentra dentro del directorio `demo/`.
+API REST para gestionar medicamentos, compras y tickets en una farmacia. El proyecto está desarrollado con Spring Boot y el módulo ejecutable se encuentra dentro del directorio `demo/`.
+
 
 ## Tecnologías
 
-- Java 25
+- Java 17
 - Spring Boot 3.3.2
-- Maven
+- Maven Wrapper
 - Spring Web
 - Spring Validation
-- JUnit y Spring Boot Test
-- JaCoCo para el reporte de cobertura
+- Spring Data JPA
+- PostgreSQL 16
+- Springdoc OpenAPI / Swagger UI
+- JUnit 5 + Spring Boot Test
+- JaCoCo
 
 ## Requisitos
 
-- JDK 25 configurado en `JAVA_HOME`
-- Windows: se puede usar `demo/mvnw.cmd` sin instalar Maven
-- Linux/macOS: se puede usar `demo/mvnw`
+- JDK 17
+- Docker Desktop o Docker Engine
+- Git
+- Node.js y npm para ejecutar el frontend
+- Windows: usar `demo/mvnw.cmd`
+- Linux/macOS: usar `demo/mvnw`
 
-## Ejecutar el proyecto
+## Obtener el proyecto con Git
 
-Desde la raíz del repositorio:
+Clona los repositorios en una misma carpeta de trabajo. Sustituye las URLs por las URLs reales de tus repositorios:
 
-### Windows
+```bash
+git clone <https://github.com/1234katy00-wd/Farmacia-Api-SpringBoot.git> farmacia-Api-SpringBoot
+git clone <https://github.com/1234katy00-wd/Farmacia.git> farmacia-frontend
+```
+
+La estructura esperada es:
+
+```text
+ProyectoLatam/
+├── farmacia-Api-SpringBoot/
+└── farmacia-frontend/
+```
+
+## Arranque rápido
+
+1. Levantar la base de datos PostgreSQL con Docker:
 
 ```powershell
 cd demo
-\.\mvnw.cmd spring-boot:run
+docker compose up -d
 ```
 
-### Linux/macOS
+2. Ejecutar la aplicación:
+
+```powershell
+cd demo
+.\mvnw.cmd spring-boot:run
+```
+
+o en Linux/macOS:
 
 ```bash
 cd demo
 ./mvnw spring-boot:run
 ```
 
-La aplicación queda disponible en `http://localhost:8080`.
+La API queda disponible en:
 
-## Compilar y probar
+- http://localhost:8080
+- Swagger UI: http://localhost:8080/swagger-ui.html
+- OpenAPI JSON: http://localhost:8080/api-docs
 
-Windows:
+Swagger y OpenAPI se habilitan mediante el perfil `dev`, que está activo por defecto en `application.yaml`.
+
+## Levantar el frontend
+
+El frontend debe ejecutarse en una terminal separada de la API.
+
+```powershell
+cd farmacia-frontend
+npm install
+npm run dev
+```
+
+En Linux/macOS:
+
+```bash
+cd farmacia-frontend
+npm install
+npm run dev
+```
+
+La aplicación frontend queda disponible normalmente en:
+
+- http://localhost:5173
+
+Para ejecutar el proyecto completo, deja la API ejecutándose en una terminal y levanta el frontend en otra:
+
+| Terminal | Comando | URL |
+| --- | --- | --- |
+| API | `cd farmacia-Api-SpringBoot/demo` y `./mvnw spring-boot:run` | http://localhost:8080 |
+| Frontend | `cd farmacia-frontend` y `npm run dev` | http://localhost:5173 |
+
+## Configuración de entorno
+
+El proyecto usa el perfil `dev` por defecto. La config principal está en:
+
+- `demo/src/main/resources/application.yaml`
+- `demo/src/main/resources/application-dev.yaml`
+
+Parámetros por defecto:
+
+| Variable | Valor por defecto |
+| --- | --- |
+| `DB_HOST` | `localhost` |
+| `DB_PORT` | `5432` |
+| `DB_NAME` | `farmacia_db` |
+| `DB_USER` | `user_db` |
+| `DB_PASSWORD` | `pass_db` |
+| `SERVER_PORT` | `8080` |
+
+También existe un ejemplo de variables en:
+
+- `demo/.env.example`
+
+## Docker PostgreSQL
+
+El contenedor se define en:
+
+- `demo/compose.yml`
+
+Service:
+
+```yaml
+services:
+  db:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+```
+
+Credenciales por defecto:
+
+- base: `farmacia_db`
+- usuario: `user_db`
+- password: `pass_db`
+
+Para detener la base de datos:
 
 ```powershell
 cd demo
-\.\mvnw.cmd clean verify
+docker compose down
 ```
 
-Linux/macOS:
+## Ejecutar pruebas
+
+Para correr la suite completa:
+
+```powershell
+cd demo
+.\mvnw.cmd test
+```
+
+Para ejecutar únicamente la prueba de integración de medicamentos:
+
+```powershell
+cd demo
+.\mvnw.cmd test -Dtest=MedicationIntegrationTest
+```
+
+o:
 
 ```bash
 cd demo
-./mvnw clean verify
+./mvnw test
 ```
 
-El reporte de cobertura se genera en `demo/target/site/jacoco/index.html`.
+El proyecto incluye un perfil de tests en:
 
-## Endpoints
+- `demo/src/test/resources/application-test.yaml`
+
+Este perfil está conectado al mismo PostgreSQL local de Docker para que los tests de contexto y JPA se ejecuten con la configuración real del proyecto.
+
+## Endpoints principales
+
+Todos los endpoints de medicamentos usan el prefijo `/api/v1/medications`.
 
 ### Health check
 
@@ -70,80 +198,114 @@ Respuesta:
 {"status":"UP"}
 ```
 
-### Listar medicamentos
+### Obtener todos los medicamentos
 
 ```http
 GET /api/v1/medications
 ```
 
-Ejemplo:
-
-```bash
-curl http://localhost:8080/api/v1/medications
-```
-
-La respuesta contiene los medicamentos disponibles en memoria:
-
-```json
-[
-    {"id":1,"name":"Paracetamol","preice":950},
-    {"id":2,"name":"Ibuprofeno","preice":1200},
-    {"id":2,"name":"Amoxicilina","preice":7490}
-]
-```
-
-### Consultar un medicamento
+### Obtener un medicamento por id
 
 ```http
 GET /api/v1/medications/{id}
 ```
 
-Devuelve `200 OK` si encuentra el medicamento y `404 Not Found` si no existe.
-
-```bash
-curl http://localhost:8080/api/v1/medications/1
-```
-
-### Comprar medicamentos
+### Crear medicamento
 
 ```http
-POST /api/v1/medications/purchase
+POST /api/v1/medications
 Content-Type: application/json
 ```
 
-El stock actual de la simulación es de 3 unidades. Una compra que supera ese valor devuelve `422 Unprocessable Entity`.
-
-```bash
-curl -X POST http://localhost:8080/api/v1/medications/purchase \
-    -H "Content-Type: application/json" \
-    -d "{\"quantity\":2}"
-```
-
-Compra exitosa:
+Ejemplo de body:
 
 ```json
-{"status":200,"message":"Operación exitosa.","name":"","timestamp":"2026-01-01T12:00:00"}
+{
+  "code": "MED-001",
+  "medicationName": "Paracetamol",
+  "totalPrice": 950,
+  "status": "OPEN",
+  "availableMedication": 24,
+  "laboratory": "Laboratorio Chile"
+}
 ```
 
-## Estructura
+### Actualizar medicamento
+
+```http
+PUT /api/v1/medications/{id}
+Content-Type: application/json
+```
+
+El campo `code` es obligatorio. Los demás campos se aplican cuando son enviados.
+
+### Eliminar medicamento
+
+```http
+DELETE /api/v1/medications/{id}
+```
+
+### Comprar tickets
+
+```http
+POST /api/v1/medications/{id}/purchase
+Content-Type: application/json
+```
+
+Ejemplo:
+
+```bash
+curl -X POST http://localhost:8080/api/v1/medications/1/purchase \
+  -H "Content-Type: application/json" \
+  -d '{"customerEmail":"cliente@example.com","quantity":2,"medicationName":"Paracetamol"}'
+```
+
+La compra valida que la cantidad sea mayor que cero y que exista stock disponible.
+
+### Obtener tickets de un medicamento
+
+```http
+GET /api/v1/medications/{id}/tickets
+```
+
+## Estructura del proyecto
 
 ```text
 demo/
-├── src/main/java/com/katerin/farmacia/
-│   ├── application/service/       # Casos de uso y lógica de medicamentos
-│   ├── domain/model/              # Modelo Medication
-│   ├── domain/exception/          # Excepciones del dominio
-│   └── infrastructure/web/        # Controladores, DTOs y manejo de errores
-├── src/main/resources/
-│   ├── application.yaml
-│   └── static/index.html
-└── src/test/                      # Pruebas unitarias y de integración
+├── src/
+│   ├── main/
+│   │   ├── java/com/katerin/farmacia/
+│   │   │   ├── application/
+│   │   │   ├── domain/
+│   │   │   └── infrastructure/
+│   │   └── resources/
+│   │       ├── application.yaml
+│   │       ├── application-dev.yaml
+│   │       └── static/
+│   └── test/
+│       ├── java/
+│       └── resources/
+├── compose.yml
+├── pom.xml
+├── mvnw
+├── mvnw.cmd
+└── README.md
 ```
 
-## Configuración
+La organización principal sigue una separación por capas:
 
-La configuración principal está en `demo/src/main/resources/application.yaml`. Actualmente define el nombre de la aplicación como `farmacia_api`; no requiere base de datos ni variables de entorno adicionales.
+- `application`: servicios y casos de uso.
+- `domain`: modelos y excepciones del dominio.
+- `infrastructure/persistence`: entidades JPA y repositorios.
+- `infrastructure/web`: controladores, DTOs y manejo HTTP.
+
+## Swagger
+
+La documentación Swagger está habilitada en la configuración del perfil `dev` y es accesible mientras la aplicación esté ejecutándose:
+
+- http://localhost:8080/swagger-ui.html
+- http://localhost:8080/api-docs
 
 ## Licencia
 
-No se ha definido una licencia para este proyecto.
+Este proyecto no tiene una licencia definida actualmente.
